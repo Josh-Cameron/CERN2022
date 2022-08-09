@@ -1,5 +1,5 @@
 #Input: txt file from SCurve
-#Output: Root file with which channels never fire, and their corresponding VFAT.
+#Output: Root file (outputfile.root) with which channels never fire, and their corresponding VFAT.
 
 import ROOT
 from argparse import RawTextHelpFormatter
