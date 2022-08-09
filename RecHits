@@ -16,10 +16,6 @@ import shutil
 import scipy
 from scipy import stats
 from collections import Counter
-#import csv
-#csvtestfile=open('csvtestfile.csv','w')
-#writer=csv.writer(csvtestfile)
-#writer.writerow(["RecHit","EVT","ClusterLength","OH","VFATs","etas","strips","phicoord","etacoord"])
 ROOT.gROOT.SetBatch(True)
 
 parser = argparse.ArgumentParser(
