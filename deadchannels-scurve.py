@@ -1,5 +1,6 @@
-#Input: txt file from SCurve
-#Output: Root file (outputfile.root) with which channels never fire, and their corresponding VFAT.
+#Input: scurvefile.txt file from scurve scan
+#Output: scurvefile_deadchannels.txt
+#Option to output to scurvefile_deadchannels.root by removing #s from lines 64-66
 
 import ROOT
 from argparse import RawTextHelpFormatter
@@ -30,7 +31,9 @@ outdir = args.odir / timestamp
 
 def main():
     with args.ifile as _file:
-        ds=np.loadtxt(_file,delimiter=',',skiprows=1)
+        ds=np.loadtxt(_file,skiprows=1)
+        #df=read_csv('_file',delimiter=',')
+        #ds=df.values
         deadvfats=np.array([])
         deadchannels=np.array([])
         for h in np.unique(ds[:,0]):
@@ -49,8 +52,17 @@ def main():
                     deadvfats=np.append(deadvfats,h)
                     deadchannels=np.append(deadchannels,int(g))
         print(deadvfats,'and',deadchannels)
-        with uproot.recreate("outputfile.root") as f:
-            t=f.mktree("Output",{"VFAT":int,"Channel":int})
-            t.extend({"VFAT":deadvfats,"Channel":deadchannels})
+        with open(str(os.path.splitext(args.ifile)[0])+'_deadchannels.txt','w') as f:
+            f.write('VFATs, CHs')
+            f.write('\n')
+            for i in np.arange(0,len(deadchannels)):
+                f.write(str(int(deadvfats[i])))
+                f.write(',')
+                f.write(str(int(deadchannels[i])))
+                f.write('\n')
+##### IF .ROOT OUTPUT DESIRED, USE FOLLOWING:
+#        with uproot.recreate(str(os.path.splitext(args.ifile)[0])+'_deadchannels.root') as f:
+#            t=f.mktree("Output",{"VFAT":int,"Channel":int})
+#            t.extend({"VFAT":deadvfats,"Channel":deadchannels})
 
 if __name__=='__main__': main()
